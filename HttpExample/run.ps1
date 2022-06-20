@@ -13,14 +13,8 @@ param($Request, $TriggerMetadata)
 # Write to the Azure Functions log stream.
 Write-Host "PowerShell HTTP trigger function initiated a request."
 
-# Sample query parameter: 
-# {"ResourceGroupName": "whitelistip", "StorageAccountName": "storageip", "RemoveIP": "75.67.234.101", "AddIP": "75.67.234.105"}
-
 # Get current Azure AD ID
 $AzureADTenant = Get-AzTenant
-
-# $ApplicationId = "6d9c734b-7fed-47ee-b3cc-e004595a9335" # <Provide Service Principal application or client ID> #
-# $AppSecret = "_Re8Q~M12n2Dr8tUuSPR9w6Mx-VdIBMT2iYdOc2W"
 
 $ApplicationId = $ENV:AppName
 $AppSecret = $ENV:AppSecret
@@ -28,10 +22,10 @@ $SecuredPassword = ConvertTo-SecureString -String $AppSecret -AsPlainText -Force
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ApplicationId, $SecuredPassword
 
 # Interact with query parameters or the body of the request.
-$ResourceGroupName = $Request.Query.ResourceGroupName #"whitelistip"
-$StorageAccountName = $Request.Query.StorageAccountName #"storageip"
-$RemoveIP = $Request.Query.RemoveIP #"75.67.234.100"
-$AddIP = $Request.Query.AddIP #"75.67.234.101"
+$ResourceGroupName = $Request.Query.ResourceGroupName
+$StorageAccountName = $Request.Query.StorageAccountName
+$RemoveIP = $Request.Query.RemoveIP
+$AddIP = $Request.Query.AddIP
 
 $body1 = "Pass a parameters in the query string or in the request body."
 
