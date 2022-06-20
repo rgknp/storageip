@@ -16,10 +16,13 @@ Write-Host "PowerShell HTTP trigger function initiated a request."
 # Sample query parameter: 
 # {"ResourceGroupName": "whitelistip", "StorageAccountName": "storageip", "RemoveIP": "75.67.234.101", "AddIP": "75.67.234.105"}
 
-$TenantId = "72f988bf-86f1-41af-91ab-2d7cd011db47" # <Provide your Azure AD GUID> #
-$ApplicationId = "6d9c734b-7fed-47ee-b3cc-e004595a9335" # <Provide Service Principal application or client ID> #
+# Get current Azure AD ID
+$AzureADTenant = Get-AzTenant
 
+# $ApplicationId = "6d9c734b-7fed-47ee-b3cc-e004595a9335" # <Provide Service Principal application or client ID> #
 # $AppSecret = "_Re8Q~M12n2Dr8tUuSPR9w6Mx-VdIBMT2iYdOc2W"
+
+$ApplicationId = $ENV:AppName
 $AppSecret = $ENV:AppSecret
 $SecuredPassword = ConvertTo-SecureString -String $AppSecret -AsPlainText -Force
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ApplicationId, $SecuredPassword
@@ -54,7 +57,7 @@ try {
 
         $body2 = "Azure credentials found, now making connection to Azure account."
 
-        Connect-AzAccount -ServicePrincipal -TenantId $TenantId -Credential $Credential
+        Connect-AzAccount -ServicePrincipal -TenantId $AzureADTenant.Id -Credential $Credential
 
 
         $body3 = "Connected to Azure, now making changes to Azure storage IP whitelist."
